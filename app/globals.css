@@ -1,75 +1,80 @@
 /* app/globals.css
-
-   Replaced usage of the Tailwind `border-border` utility with CSS custom
-   properties so the border color can be controlled by theme variables.
-   This file intentionally avoids using `@apply border-border` so the
-   project no longer depends on a `border-border` utility class.
+   Replaced tailwind @apply usages for border/background/foreground with CSS variables
+   - removed any use of `@apply border-border` and `@apply bg-background` / `@apply text-foreground`
+   - introduced CSS variables and used them throughout the global stylesheet
 */
 
+:root {
+  /* Core color variables — adjust values to match your design system or tailwind config */
+  --border-color: rgba(15, 23, 42, 0.06); /* subtle border */
+  --border: 1px solid var(--border-color);
+
+  --background: #ffffff;
+  --foreground: #0f172a;
+}
+
+/* Tailwind layers (if Tailwind is used in the project) */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Core theme variables (light mode defaults) */
-  --bg: #ffffff;
-  --fg: #0f172a; /* slate-900 */
-  --muted: #6b7280; /* slate-400 */
-  --border: rgba(15, 23, 42, 0.06); /* subtle light border */
-  --radius-sm: 6px;
-  --radius-md: 8px;
+/* Global reset + use variables */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #__next {
+  height: 100%;
 }
 
-/* Dark theme overrides */
-[data-theme="dark"] {
-  --bg: #0b1221; /* dark background */
-  --fg: #e6eef8; /* light foreground */
-  --muted: #9aa6b2;
-  --border: rgba(226, 238, 248, 0.06); /* subtle dark border */
-}
-
-/* Global resets / base styles */
-html, body, #__next { height: 100%; }
 body {
-  background-color: var(--bg);
-  color: var(--fg);
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
-/* Replace @apply border-border with explicit border using CSS variable */
-.border-default {
-  border: 1px solid var(--border);
+/* Replacement utility-like classes that rely on CSS variables instead of @apply */
+/* These keep usage consistent while avoiding @apply usage in component rules */
+.border-base {
+  border: var(--border);
 }
 
-/* Common components using the CSS variable for borders */
+.bg-base {
+  background-color: var(--background);
+}
+
+.text-base {
+  color: var(--foreground);
+}
+
+/* Example usage for common layout elements */
 .container {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
+/* If components previously used @apply border-border / bg-background / text-foreground,
+   update those components to use the variables or the small helper classes above. */
+
+/* Example component using variables directly */
 .card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  background-color: var(--background);
+  color: var(--foreground);
+  border: var(--border);
+  border-radius: 0.5rem;
   padding: 1rem;
 }
 
-.input, .select, .textarea {
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: inherit;
-  padding: 0.5rem 0.75rem;
+/* Focus ring example using border color variable */
+:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.08); /* subtle focus ring */
 }
 
-/* Utility to opt-in to the CSS-variable based border on elements */
-.u-border {
-  border: 1px solid var(--border) !important;
-}
-
-/* Keep Tailwind component/utility rules intact below if present in project */
-/* Additional project-specific rules that previously used `@apply border-border` should be
-   updated to use `border: 1px solid var(--border)` or the .u-border / .border-default utilities.
-*/
+/* End of globals.css */
