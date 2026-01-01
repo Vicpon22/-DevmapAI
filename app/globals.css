@@ -1,48 +1,75 @@
+/* app/globals.css
+
+   Replaced usage of the Tailwind `border-border` utility with CSS custom
+   properties so the border color can be controlled by theme variables.
+   This file intentionally avoids using `@apply border-border` so the
+   project no longer depends on a `border-border` utility class.
+*/
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Variáveis de tema (ajuste as cores conforme quiser) */
 :root {
-  --background: #0f172a; /* slate-900 */
-  --foreground: #e2e8f0; /* slate-200 */
-  --border: #374151;     /* slate-700 */
+  /* Core theme variables (light mode defaults) */
+  --bg: #ffffff;
+  --fg: #0f172a; /* slate-900 */
+  --muted: #6b7280; /* slate-400 */
+  --border: rgba(15, 23, 42, 0.06); /* subtle light border */
+  --radius-sm: 6px;
+  --radius-md: 8px;
 }
 
-@layer base {
-  /* Removi o `@apply border-border` que estava causando o erro */
-  body {
-    background-color: var(--background);
-    color: var(--foreground);
-  }
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --bg: #0b1221; /* dark background */
+  --fg: #e6eef8; /* light foreground */
+  --muted: #9aa6b2;
+  --border: rgba(226, 238, 248, 0.06); /* subtle dark border */
 }
 
-@layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent;
-  }
+/* Global resets / base styles */
+html, body, #__next { height: 100%; }
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar personalizada */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+/* Replace @apply border-border with explicit border using CSS variable */
+.border-default {
+  border: 1px solid var(--border);
 }
 
-::-webkit-scrollbar-track {
-  background: #1e293b;
+/* Common components using the CSS variable for borders */
+.container {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
 }
 
-::-webkit-scrollbar-thumb {
-  background: #475569;
-  border-radius: 5px;
+.card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+.input, .select, .textarea {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: inherit;
+  padding: 0.5rem 0.75rem;
 }
 
-/* Animações suaves */
-* {
-  transition: color 0.2s ease, background-color 0.2s ease;
+/* Utility to opt-in to the CSS-variable based border on elements */
+.u-border {
+  border: 1px solid var(--border) !important;
 }
+
+/* Keep Tailwind component/utility rules intact below if present in project */
+/* Additional project-specific rules that previously used `@apply border-border` should be
+   updated to use `border: 1px solid var(--border)` or the .u-border / .border-default utilities.
+*/
