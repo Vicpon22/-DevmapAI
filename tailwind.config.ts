@@ -21,6 +21,10 @@ const config: Config = {
           800: '#075985',
           900: '#0c4a6e',
         },
+        // Theme tokens mapped to CSS variables so utilities like `border-border`, `bg-background` and `text-foreground` are generated
+        border: 'var(--border)',
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
@@ -32,7 +36,7 @@ const config: Config = {
           '100%': { opacity: '1' },
         },
         slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
+          '0%': { transform: 'translateY(8px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
       },
@@ -40,4 +44,5 @@ const config: Config = {
   },
   plugins: [],
 }
+
 export default config
